@@ -1,19 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
 CONF="$HOME/.bitcoin/bitcoin.conf"
 
 # Generate bitcoin.conf
-setup.sh
-
-if [ $# -gt 0 ]; then
-    args=("$@")
-else
-    args=("-rpcallowip=::/0")
-fi
+$HOME/setup.sh
 
 echo "Loading ${CONF}"
+cat $CONF
 awk -F\= '{gsub(/"/,"",$2);print "Node parameter " toupper($1) " is set " $2}' ${CONF}
 
-
 set -ex
-exec bitcoind -printtoconsole "${args[@]}"
+exec bitcoind -printtoconsole -conf=$CONF "$@"

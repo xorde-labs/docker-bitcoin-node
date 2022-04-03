@@ -11,16 +11,19 @@ set -e
 
 CONF="$HOME/.bitcoin/bitcoin.conf"
 
+touch $CONF
+
+### generate random password
 if [ ! -e "rpcpassword.txt" ]; then
   tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1 > rpcpassword.txt
 fi;
 
-if [ -z ${ENABLE_WALLET:+x} ]; then
-    echo "disablewallet=${ENABLE_WALLET}" >> $CONF
+if [ ! -z ${ENABLE_WALLET:+x} ]; then
+    echo "wallet=$HOME/.bitcoin/wallet" >> $CONF
 fi;
 
 if [ ! -z ${TESTNET:+x} ]; then
-    echo "testnet=${TESTNET}" >> $CONF
+    echo "testnet=1" >> $CONF
 fi;
 
 if [ ! -z ${MAX_CONNECTIONS:+x} ]; then
@@ -33,14 +36,15 @@ if [ ! -z ${ONLYNET:+x} ]; then
 fi;
 
 if [ ! -z ${RPC_SERVER:+x} ]; then
-	RPC_USER=${RPC_USER:-bitcoinrpc}
-	RPC_PASSWORD=${RPC_PASSWORD:-$(cat rpcpassword.txt)}
+	RPC_AUTH="${RPC_USER:-bitcoinrpc}:${RPC_PASSWORD:-$(cat rpcpassword.txt)}"
 
 	echo "server=1" >> $CONF
 	echo "rpcbind=0.0.0.0" >> $CONF
-	echo "rpcallowip=0.0.0.0/0" >> $CONF
-	echo "rpcuser=${RPC_USER}" >> $CONF
-	echo "rpcpassword=${RPC_PASSWORD}" >> $CONF
+	echo "rpcallowip=${RPC_ALLOW:-0.0.0.0/0}" >> $CONF
+	echo "rpcauth=${RPC_AUTH}" >> $CONF
+	echp "rpcport=${RPC_PORT:-8332}" >> $CONF
+
+	echo "RPC Auth: ${RPC_AUTH}"
 fi;
 
 echo "Initialization completed successfully"
