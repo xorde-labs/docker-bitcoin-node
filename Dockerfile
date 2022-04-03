@@ -11,7 +11,7 @@ RUN apk upgrade -U && \
 RUN git -c advice.detachedHead=false clone -b $(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/bitcoin/bitcoin/releases/latest)) https://github.com/bitcoin/bitcoin.git
 
 ###
-RUN cd bitcoin && git rev-parse HEAD
+RUN cd bitcoin && mkdir -p /workdir/build && echo "$(git rev-parse HEAD)" | tee /workdir/build/git-commit.txt
 
 ###
 RUN cd bitcoin && ./autogen.sh && ./configure \
