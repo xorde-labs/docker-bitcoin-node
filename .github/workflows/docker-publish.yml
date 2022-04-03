@@ -16,6 +16,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - uses: actions/checkout@v2
+ 
       - name: Check out the repo
-        uses: actions/checkout@v2
         run: ci/build.sh
