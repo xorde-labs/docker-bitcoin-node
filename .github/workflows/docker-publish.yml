@@ -17,6 +17,5 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - uses: actions/checkout@v2
- 
-      - name: Check out the repo
+      - name: Check out the repo, build and push
         run: ci/build.sh
