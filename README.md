@@ -1,5 +1,6 @@
 # Bitcoin node
->Docker image based on Alpine stable
+
+[![Docker Image CI](https://github.com/xorde-nodes/bitcoin-node/actions/workflows/docker-image.yml/badge.svg)](https://github.com/xorde-nodes/bitcoin-node/actions/workflows/docker-image.yml)
 
 ### Quick start:
 ```shell
