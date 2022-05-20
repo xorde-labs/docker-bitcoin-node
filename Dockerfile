@@ -34,7 +34,7 @@ RUN cd bitcoin && make -j4
 RUN cd bitcoin && make install DESTDIR=/workdir/build && find /workdir/build
 
 ### Output any missing library deps:
-RUN { for i in $(find /workdir/build/usr/bin/bitcoind -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
+RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
 
 FROM alpine:latest
 
