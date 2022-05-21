@@ -34,7 +34,8 @@ RUN cd bitcoin && make -j4
 RUN cd bitcoin && make install DESTDIR=/workdir/build && find /workdir/build
 
 ### Output any missing library deps:
-RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
+RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); \
+    do readelf -d $i 2>/dev/null | grep NEEDED | awk '{print $5}' | sed "s/\[//g" | sed "s/\]//g"; done; } | sort -u
 
 FROM alpine:latest
 
@@ -52,10 +53,13 @@ RUN chmod 777 /root/*.sh && ls -la /root/*.sh
 
 ###
 COPY --from=builder /workdir/build /
-RUN addgroup -S bitcoin 2>/dev/null && adduser -S -D -H -h /var/lib/bitcoin -s /sbin/nologin -G bitcoin -g bitcoin bitcoin 2>/dev/null
+RUN addgroup -S bitcoin 2>/dev/null && \
+    adduser -S -D -H -h /var/lib/bitcoin -s /sbin/nologin -G bitcoin -g bitcoin bitcoin 2>/dev/null
 
 ### Output bitcoind library deps to check if bitcoind is compiled static:
-RUN ldd /usr/bin/bitcoind && run ls -hal /root
+RUN find . -type f -exec sha256sum {} \; && \
+    /root/version.sh && \
+    ldd /usr/bin/bitcoind
 
 ENTRYPOINT ["/root/entrypoint.sh"]
 
