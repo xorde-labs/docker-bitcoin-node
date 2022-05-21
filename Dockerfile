@@ -55,9 +55,8 @@ COPY --from=builder /workdir/build /
 RUN addgroup -S bitcoin 2>/dev/null && adduser -S -D -H -h /var/lib/bitcoin -s /sbin/nologin -G bitcoin -g bitcoin bitcoin 2>/dev/null
 
 ### Output bitcoind library deps to check if bitcoind is compiled static:
-RUN ldd /usr/bin/bitcoind
+RUN ldd /usr/bin/bitcoind && run ls -hal /root
 
-RUN ls -la /root
-CMD ["/root/entrypoint.sh"]
+ENTRYPOINT ["/root/entrypoint.sh"]
 
 EXPOSE 8332 8333

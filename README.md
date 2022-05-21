@@ -5,19 +5,19 @@
 ### Quick start
 
 ```shell
-docker run -d -p 8332:8332 -p 8333:8333 --restart always xorde/bitcoin-node:latest
+docker run -d -p 8332:8332 -p 8333:8333 --restart unless-stopped ghcr.io/xorde/bitcoin-node:latest
 ```
 
 Store all settings and blockchain outside docker container:
 
 ```shell
-docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "ENABLE_WALLET=1" -e "RPC_SERVER=1" xorde/bitcoin-node:latest
+docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "ENABLE_WALLET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
 ```
 
 Store all settings and blockchain outside docker container and run node on testnet:
 
 ```shell
-docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "TESTNET=1" -e "ENABLE_WALLET=1" -e "RPC_SERVER=1" xorde/bitcoin-node:latest
+docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "TESTNET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
 ```
 
 ### Parameters
