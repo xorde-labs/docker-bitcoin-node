@@ -6,12 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: docker.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$(date +%s)
+      run: docker build .
