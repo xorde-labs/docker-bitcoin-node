@@ -2,7 +2,7 @@ version: '3'
 
 services:
   bitcoin-node:
-    image: ghcr.io/xorde/bitcoin-node:latest
+    image: ghcr.io/xorde-nodes/bitcoin-node:latest
     restart: unless-stopped
     volumes:
       - bitcoin_data:/root/.bitcoin
