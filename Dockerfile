@@ -39,28 +39,39 @@ RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); \
 
 FROM alpine:latest
 
-WORKDIR /root
+ENV BLOCKCHAIN_NAME=bitcoin
+WORKDIR /home/${BLOCKCHAIN_NAME}
 
-# Add packages
-RUN apk upgrade -U && \
-    apk add openssl ca-certificates boost miniupnpc libevent libzmq libstdc++ libgcc
+### Add packages
+RUN apk upgrade -U \
+    && apk add openssl ca-certificates boost miniupnpc libevent libzmq libstdc++ libgcc
 
-RUN mkdir -p /root/.bitcoin/
+### Add group
+RUN addgroup -S ${BLOCKCHAIN_NAME}
 
-###
-COPY ./scripts /root
-RUN chmod 777 /root/*.sh && ls -la /root/*.sh
+### Add user
+RUN adduser -S -D -H -h /home/${BLOCKCHAIN_NAME} \
+    -s /sbin/nologin \
+    -G ${BLOCKCHAIN_NAME} \
+    -g "User of ${BLOCKCHAIN_NAME}" \
+    ${BLOCKCHAIN_NAME}
 
-###
+### Copy script files (entrypoint, config, etc)
+COPY ./scripts .
+RUN chmod 755 ./*.sh && ls -adl ./*.sh
+
+### Copy build result from builder context
 COPY --from=builder /workdir/build /
-RUN addgroup -S bitcoin 2>/dev/null && \
-    adduser -S -D -H -h /var/lib/bitcoin -s /sbin/nologin -G bitcoin -g bitcoin bitcoin 2>/dev/null
 
 ### Output bitcoind library deps to check if bitcoind is compiled static:
-RUN find . -type f -exec sha256sum {} \; && \
-    /root/version.sh && \
-    ldd /usr/bin/bitcoind
+RUN find . -type f -exec sha256sum {} \; \
+    && ldd /usr/bin/bitcoind \
+    && echo "Built version: $(./version.sh)"
 
-ENTRYPOINT ["/root/entrypoint.sh"]
+RUN chown -R ${BLOCKCHAIN_NAME} .
+
+USER ${BLOCKCHAIN_NAME}
+
+ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 8332 8333

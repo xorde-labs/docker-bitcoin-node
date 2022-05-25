@@ -24,18 +24,16 @@ docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8
 
 Available environment variables (to use with docker "-e" argument):
 
+#### Enable Wallet
+
+```dotenv
+WALLET_ENABLE=1
+```
+
 #### Enable Testnet
 
 ```dotenv
-TESTNET=1
-```
-
-#### Limit connections to specific IP version
-
-(this will remove warnings for ipv6 connections):
-
-```dotenv
-ONLYNET=ipv4
+TESTNET_ENABLE=1
 ```
 
 #### Limit maximum network connections
@@ -47,7 +45,7 @@ MAX_CONNECTIONS=30
 #### Enable RPC server
 
 ```dotenv
-RPC_SERVER=1
+RPC_ENABLE=1
 ```
 
 #### Set specific username for RPC server

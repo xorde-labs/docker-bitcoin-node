@@ -2,16 +2,16 @@ version: '3'
 
 services:
   bitcoin-node:
+    build: .
     image: ghcr.io/xorde-nodes/bitcoin-node:latest
     restart: unless-stopped
     volumes:
       - bitcoin_data:/root/.bitcoin
     environment:
-      - ENABLE_WALLET
-      - TESTNET
+      - WALLET_ENABLE
+      - TESTNET_ENABLE
       - MAX_CONNECTIONS
-      - ONLYNET
-      - RPC_SERVER
+      - RPC_ENABLE
       - RPC_USER
       - RPC_PASSWORD
       - RPC_ALLOW

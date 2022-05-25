@@ -1,13 +1,21 @@
 #!/bin/sh
 
-CONF="$HOME/.bitcoin/bitcoin.conf"
+alias echo="echo ENTRYPOINT:"
+
+CONFIG_FILE_DEFAULT=${HOME}/.bitcoin/bitcoin.conf
+CONFIG_FILE="${CONFIG_FILE:-${CONFIG_FILE_DEFAULT}}"
+CONFIG_FILE_DIR=$(dirname "${CONFIG_FILE}")
+
+mkdir -p "${CONFIG_FILE_DIR}"
 
 # Generate bitcoin.conf
-$HOME/setup.sh
+$HOME/config.sh ${CONFIG_FILE}
 
-echo "Loading ${CONF}"
-cat $CONF
-awk -F\= '{gsub(/"/,"",$2);print "Node parameter " toupper($1) " is set " $2}' ${CONF}
+echo "Loading ${CONFIG_FILE}"
+echo "-----------------------"
+cat "${CONFIG_FILE}"
+echo "-----------------------"
 
 set -ex
-exec bitcoind -printtoconsole -conf=$CONF "$@"
+# shellcheck disable=SC2068
+exec bitcoind -printtoconsole -conf="${CONFIG_FILE}" $@
