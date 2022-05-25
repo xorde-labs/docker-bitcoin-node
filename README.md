@@ -4,6 +4,7 @@
 
 This is a dockerized, built from scratch bitcoin node.
 
+## Installing
 
 ### Quick start
 
@@ -141,4 +142,14 @@ Default: `125`
 
 ```dotenv
 MAX_CONNECTIONS=30
+```
+
+## Upgrading
+
+Simple steps to upgrade to new version of the docker image:
+
+```shell
+docker compose down \
+&& docker compose pull \
+&& docker compose up
 ```
