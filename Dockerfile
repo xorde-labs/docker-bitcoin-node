@@ -1,5 +1,7 @@
 FROM alpine:latest as builder
 
+ENV BLOCKCHAIN_NAME=bitcoin
+
 WORKDIR /workdir
 
 RUN apk upgrade -U && \
@@ -8,13 +10,13 @@ RUN apk upgrade -U && \
 
 ### checkout latest _RELEASE_ so we will build stable
 ### (we do not want to build working master for production)
-RUN git -c advice.detachedHead=false clone -b $(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/bitcoin/bitcoin/releases/latest)) https://github.com/bitcoin/bitcoin.git
+RUN git -c advice.detachedHead=false clone -b $(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/bitcoin/bitcoin/releases/latest)) https://github.com/bitcoin/bitcoin.git ${BLOCKCHAIN_NAME}
+
+### Save git commit sha of the repo to build dir
+RUN cd ${BLOCKCHAIN_NAME} && mkdir -p /workdir/build && echo "${BLOCKCHAIN_NAME}:$(git rev-parse HEAD)" | tee /workdir/build/${BLOCKCHAIN_NAME}-commit-sha.txt
 
 ###
-RUN cd bitcoin && mkdir -p /workdir/build && echo "$(git rev-parse HEAD)" | tee /workdir/build/git-commit.txt
-
-###
-RUN cd bitcoin && ./autogen.sh && ./configure \
+RUN cd ${BLOCKCHAIN_NAME} && ./autogen.sh && ./configure \
     --prefix=/usr \
     --enable-hardening \
     --enable-static \
@@ -28,10 +30,10 @@ RUN cd bitcoin && ./autogen.sh && ./configure \
     --disable-man
 
 ###
-RUN cd bitcoin && make -j4
+RUN cd ${BLOCKCHAIN_NAME} && make -j4
 
 ###
-RUN cd bitcoin && make install DESTDIR=/workdir/build && find /workdir/build
+RUN cd ${BLOCKCHAIN_NAME} && make install DESTDIR=/workdir/build && find /workdir/build
 
 ### Output any missing library deps:
 RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); \
