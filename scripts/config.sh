@@ -37,27 +37,27 @@ if [ -n "${NETWORK+1}" ]; then
   case "${NETWORK}" in
     mainnet)
       echo "Network is mainnet"
-      NETWORK_SECTION=main
+      NETWORK_SECTION="main"
       ;;
     testnet)
       echo "Network is testnet"
       printf "testnet=1\n" >> "${CONFIG_FILE}"
-      NETWORK_SECTION=main
+      NETWORK_SECTION="test"
       ;;
     signet)
       echo "Network is signet"
       printf "signet=1\n" >> "${CONFIG_FILE}"
-      NETWORK_SECTION=signet
+      NETWORK_SECTION="signet"
       ;;
     regtest)
       echo "Network is regtest"
       printf "regtest=1\n" >> "${CONFIG_FILE}"
-      NETWORK_SECTION=regtest
+      NETWORK_SECTION="regtest"
       ;;
     *)
       echo "Unknown network selected: ${NETWORK}... Defaulting to testnet"
       printf "testnet=1\n" >> "${CONFIG_FILE}"
-      NETWORK_SECTION=test
+      NETWORK_SECTION="test"
       ;;
   esac
 fi

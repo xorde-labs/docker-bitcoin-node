@@ -16,6 +16,8 @@ services:
       - RPC_PASSWORD
       - RPC_ALLOW
       - RPC_PORT
+      - CONFIG_FILE
+      - SOCKS5_PROXY
     ports:
       - ${RPC_PORT}:8332/tcp
       - ${PORT}:8333/tcp

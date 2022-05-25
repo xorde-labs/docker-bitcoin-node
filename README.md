@@ -24,19 +24,45 @@ docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8
 
 Available environment variables (to use with docker "-e" argument):
 
-#### Enable Wallet
+#### Configuration File
+
+Default: `${HOME}/.bitcoin/bitcoin.conf`
+
+> Please note, that startup sequence scripts will create specified config file if it doesn't exist
 
 ```dotenv
-WALLET_ENABLE=1
+CONFIG_FILE=/path/bitcoin.conf
 ```
 
-#### Enable Testnet
+#### Enable Wallet
+
+Default: `false`
 
 ```dotenv
-TESTNET_ENABLE=1
+WALLET_ENABLE=Y
+```
+
+#### Select Network
+
+Default: `mainnet`
+
+Possible values: testnet, signet, regtest
+
+```dotenv
+NETWORK=mainnet
+```
+
+#### Enable Socks5 Proxy
+
+Default: empty
+
+```dotenv
+SOCKS5_PROXY=127.0.0.1:9050
 ```
 
 #### Limit maximum network connections
+
+Default: `125`
 
 ```dotenv
 MAX_CONNECTIONS=30
@@ -44,13 +70,15 @@ MAX_CONNECTIONS=30
 
 #### Enable RPC server
 
+Default: `false`
+
 ```dotenv
-RPC_ENABLE=1
+RPC_ENABLE=Y
 ```
 
 #### Set specific username for RPC server
 
-(otherwise `bitcoinrpc` will be used as default)
+Default: `bitcoinrpc`
 
 ```dotenv
 RPC_USER=user
@@ -58,7 +86,7 @@ RPC_USER=user
 
 #### Set specific password for RPC server 
 
-(otherwise automatically generated will be used):
+Default: automatically generated, and will be printed to console
 
 ```dotenv
 RPC_PASSWORD=pa$$word
