@@ -16,6 +16,7 @@ services:
       - RPC_PASSWORD
       - RPC_ALLOW
       - RPC_PORT
+      - RPC_BIND
       - CONFIG_FILE
       - SOCKS5_PROXY
       - TXINDEX_ENABLE

@@ -79,7 +79,7 @@ if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
 	printf "server=1\n" >> "${CONFIG_FILE}"
 	printf "rpcallowip=${RPC_ALLOW:-0.0.0.0/0}\n" >> "${CONFIG_FILE}"
 	printf "rpcauth=${RPC_AUTH}\n" >> "${CONFIG_FILE}"
-	printf "\n[${NETWORK_SECTION:-main}]\nrpcport=${RPC_PORT:-8332}\n" >> "${CONFIG_FILE}"
+	printf "\n[${NETWORK_SECTION:-main}]\nrpcport=8332\nrpcbind=${RPC_BIND:-0.0.0.0}" >> "${CONFIG_FILE}"
 
 	echo "RPC Auth: ${RPC_AUTH}"
 fi

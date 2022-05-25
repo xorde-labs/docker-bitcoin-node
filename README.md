@@ -83,22 +83,6 @@ Possible values: testnet, signet, regtest
 NETWORK=mainnet
 ```
 
-#### Enable Socks5 Proxy
-
-Default: empty
-
-```dotenv
-SOCKS5_PROXY=127.0.0.1:9050
-```
-
-#### Limit maximum network connections
-
-Default: `125`
-
-```dotenv
-MAX_CONNECTIONS=30
-```
-
 #### Enable RPC server
 
 Default: `false`
@@ -123,6 +107,16 @@ Default: automatically generated, and will be printed to console
 RPC_PASSWORD=pa$$word
 ```
 
+#### Set TCP port for RPC server
+
+Default: none
+
+```dotenv
+RPC_PORT=8332
+```
+
+### Advanced config options
+
 #### Enable TxIndex
 
 Default: `false`
@@ -132,3 +126,19 @@ TXINDEX_ENABLE=Y
 ```
 
 > For more info see this: https://bitcoin.stackexchange.com/questions/35707/what-are-pros-and-cons-of-txindex-option
+
+#### Enable Socks5 Proxy
+
+Default: empty
+
+```dotenv
+SOCKS5_PROXY=127.0.0.1:9050
+```
+
+#### Limit maximum network connections
+
+Default: `125`
+
+```dotenv
+MAX_CONNECTIONS=30
+```

@@ -41,6 +41,11 @@ RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); \
 
 FROM alpine:latest
 
+### https://specs.opencontainers.org/image-spec/annotations/
+LABEL org.opencontainers.image.title="Bitcoin Node Docker Image"
+LABEL org.opencontainers.image.vendor="Xorde Technologies"
+LABEL org.opencontainers.image.source="https://github.com/xorde-nodes/bitcoin-node"
+
 ENV BLOCKCHAIN_NAME=bitcoin
 WORKDIR /home/${BLOCKCHAIN_NAME}
 
