@@ -41,7 +41,7 @@ Example .env:
 
 ```dotenv
 WALLET_ENABLE=1
-TESTNET_ENABLE=1
+NETWORK=testnet
 MAX_CONNECTIONS=50
 RPC_ENABLE=1
 RPC_USER=rpc-user
