@@ -6,7 +6,7 @@ services:
     image: ghcr.io/xorde-nodes/bitcoin-node:latest
     restart: unless-stopped
     volumes:
-      - bitcoin_data:/root/.bitcoin
+      - bitcoin_data:/home/bitcoin/.bitcoin
     environment:
       - WALLET_ENABLE
       - TESTNET_ENABLE
