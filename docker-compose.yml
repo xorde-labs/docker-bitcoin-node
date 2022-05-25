@@ -18,6 +18,7 @@ services:
       - RPC_PORT
       - CONFIG_FILE
       - SOCKS5_PROXY
+      - TXINDEX_ENABLE
     ports:
       - ${RPC_PORT}:8332/tcp
       - ${PORT}:8333/tcp

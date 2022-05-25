@@ -25,6 +25,12 @@ if printf "${WALLET_ENABLE}" | grep -q "[Yy1]"; then
   printf "wallet=$HOME/.bitcoin/wallet\n" >> "${CONFIG_FILE}"
 fi
 
+### Enable txindex:
+if printf "${TXINDEX_ENABLE}" | grep -q "[Yy1]"; then
+  echo "Enabling txindex"
+  printf "txindex=1\n" >> "${CONFIG_FILE}"
+fi
+
 ### Setting up max connections:
 if [ -n "${MAX_CONNECTIONS+1}" ]; then
   echo "Max connections ${MAX_CONNECTIONS}"

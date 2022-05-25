@@ -122,3 +122,13 @@ Default: automatically generated, and will be printed to console
 ```dotenv
 RPC_PASSWORD=pa$$word
 ```
+
+#### Enable TxIndex
+
+Default: `false`
+
+```dotenv
+TXINDEX_ENABLE=Y
+```
+
+> For more info see this: https://bitcoin.stackexchange.com/questions/35707/what-are-pros-and-cons-of-txindex-option
