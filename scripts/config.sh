@@ -10,7 +10,7 @@ if [ -f "${CONFIG_FILE}" ]; then
   exit 0
 else
   echo "[${CONFIG_FILE}] doesn't exist. Initializing..."
-  printf "# Automatically generated config\n" > "${CONFIG_FILE}"
+  printf "# Generated config: START -------------\n\n" > "${CONFIG_FILE}"
 fi
 
 ### Socks5 proxy:
@@ -84,4 +84,5 @@ if printf "${RPC_ENABLE}" | grep -q "[Yy1]"; then
 	printf "\n[${NETWORK_SECTION:-main}]\nrpcport=8332\nrpcbind=${RPC_BIND:-0.0.0.0}" >> "${CONFIG_FILE}"
 fi
 
-echo "Config initialized completed successfully (${CONFIG_FILE})"
+echo "Config initialization completed successfully (${CONFIG_FILE})"
+printf "\n\n# Generated config: END -------------\n" >> "${CONFIG_FILE}"
