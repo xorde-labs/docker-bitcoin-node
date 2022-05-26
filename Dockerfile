@@ -89,7 +89,7 @@ RUN find . -type f -exec sha256sum {} \; \
     && ldd /usr/bin/bitcoind \
     && echo "Built version: $(./version.sh)"
 
-RUN mkdir -p .bitcoin \
+RUN mkdir -p .${BLOCKCHAIN_NAME} \
     && chown -R ${BLOCKCHAIN_NAME} .
 
 USER ${BLOCKCHAIN_NAME}

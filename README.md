@@ -1,8 +1,11 @@
-# Bitcoin node
+# Bitcoin Docker Node
+
+Main goal of this project is to dockerize blockchain nodes so we could run them in pure DevOps fashion: dockerized, cluster-ready, manageable.
 
 [![Docker Build](https://github.com/xorde-nodes/bitcoin-node/actions/workflows/docker-image.yml/badge.svg)](https://github.com/xorde-nodes/bitcoin-node/actions/workflows/docker-image.yml)
 
-This is a dockerized, built from scratch bitcoin node.
+This is a dockerized **built from sources** bitcoin node.
+
 
 ## Installing
 
@@ -17,13 +20,13 @@ docker run -d -p 8332:8332 -p 8333:8333 --restart unless-stopped ghcr.io/xorde/b
 Store all settings and blockchain outside docker container:
 
 ```shell
-docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "ENABLE_WALLET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
+docker run -d --name bitcoin-node -v /data/bitcoin:/home/bitcoin/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "ENABLE_WALLET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
 ```
 
 Store all settings and blockchain outside docker container and run node on testnet:
 
 ```shell
-docker run -d --name bitcoin-node -v /data1/btc:/root/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "TESTNET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
+docker run -d --name bitcoin-node -v /data1/bitcoin:/home/bitcoin/.bitcoin -p 8332:8332 -p 8333:8333 --restart always -e "TESTNET=1" -e "RPC_SERVER=1" ghcr.io/xorde/bitcoin-node:latest
 ```
 
 #### Docker Compose
@@ -73,6 +76,8 @@ Default: `false`
 ```dotenv
 WALLET_ENABLE=Y
 ```
+
+Config script will automatically create `default_wallet` wallet, since bitcoind do not auto create wallets anymore. 
 
 #### Select Network
 
