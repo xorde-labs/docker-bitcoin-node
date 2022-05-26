@@ -8,7 +8,7 @@ CONFIG_FILE_DIR=$(dirname "${CONFIG_FILE}")
 
 mkdir -p "${CONFIG_FILE_DIR}"
 
-# Generate bitcoin.conf
+### Generate bitcoin.conf
 $HOME/config.sh ${CONFIG_FILE}
 
 echo "Loading ${CONFIG_FILE}"

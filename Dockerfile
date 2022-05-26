@@ -4,18 +4,27 @@ ENV BLOCKCHAIN_NAME=bitcoin
 
 WORKDIR /workdir
 
+ARG SOURCE_VERSION
+ARG SOURCE_REPO=https://github.com/bitcoin/bitcoin
+ARG DOCKER_GIT_SHA
+
+### Install required dependencies
 RUN apk upgrade -U && \
     apk add curl git autoconf automake make gcc g++ clang libtool boost-dev miniupnpc-dev && \
     apk add protobuf-dev libqrencode-dev libevent-dev chrpath zeromq-dev
 
+RUN mkdir -p build_info && printenv | tee build_info/build_envs.txt
+
 ### checkout latest _RELEASE_ so we will build stable
 ### (we do not want to build working master for production)
-RUN git -c advice.detachedHead=false clone -b $(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/bitcoin/bitcoin/releases/latest)) https://github.com/bitcoin/bitcoin.git ${BLOCKCHAIN_NAME}
+RUN git clone --depth 1 -c advice.detachedHead=false \
+    -b ${SOURCE_VERSION:-$(basename $(curl -Ls -o /dev/null -w %{url_effective} ${SOURCE_REPO}/releases/latest))} \
+    ${SOURCE_REPO}.git ${BLOCKCHAIN_NAME}
 
-### Save git commit sha of the repo to build dir
-RUN cd ${BLOCKCHAIN_NAME} && mkdir -p /workdir/build && echo "${BLOCKCHAIN_NAME}:$(git rev-parse HEAD)" | tee /workdir/build/${BLOCKCHAIN_NAME}-commit-sha.txt
+### Save git commit sha of the repo to build_info dir
+RUN cd ${BLOCKCHAIN_NAME} && echo "SOURCE_SHA=$(git rev-parse HEAD)" | tee -a ../build_info/build_envs.txt
 
-###
+### Configure sources
 RUN cd ${BLOCKCHAIN_NAME} && ./autogen.sh && ./configure \
     --prefix=/usr \
     --enable-hardening \
@@ -29,11 +38,15 @@ RUN cd ${BLOCKCHAIN_NAME} && ./autogen.sh && ./configure \
     --disable-util-tx \
     --disable-man
 
-###
-RUN cd ${BLOCKCHAIN_NAME} && make -j4
+### Make build
+RUN cd ${BLOCKCHAIN_NAME} \
+    && make -j4
 
-###
-RUN cd ${BLOCKCHAIN_NAME} && make install DESTDIR=/workdir/build && find /workdir/build
+### Install build
+RUN cd ${BLOCKCHAIN_NAME} \
+    && mkdir -p /workdir/build \
+    && make install DESTDIR=/workdir/build \
+    && find /workdir/build
 
 ### Output any missing library deps:
 RUN { for i in $(find /workdir/build/usr/bin/ -type f -executable -print); \
@@ -69,8 +82,9 @@ RUN chmod 755 ./*.sh && ls -adl ./*.sh
 
 ### Copy build result from builder context
 COPY --from=builder /workdir/build /
+COPY --from=builder /workdir/build_info/ .
 
-### Output bitcoind library deps to check if bitcoind is compiled static:
+### Output build binary deps to check if it is compiled static (or else missing some libraries):
 RUN find . -type f -exec sha256sum {} \; \
     && ldd /usr/bin/bitcoind \
     && echo "Built version: $(./version.sh)"

@@ -9,7 +9,7 @@ docker build -t ${IMAGE_NAME} .
 if [ $? -eq 0 ]
 then
 	echo ">>> Build successful"
-	IMAGE_VERSION=$(docker run ${IMAGE_NAME} /root/version.sh)
+	IMAGE_VERSION=$(docker run ${IMAGE_NAME} ./version.sh)
 	docker image tag ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_VERSION}
 	docker image ls ${IMAGE_NAME}
   	docker push -a ${IMAGE_NAME}
