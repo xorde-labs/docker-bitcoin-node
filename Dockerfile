@@ -10,8 +10,8 @@ ARG DOCKER_GIT_SHA
 
 ### Install required dependencies
 RUN apk upgrade -U && \
-    apk add curl git autoconf automake make gcc g++ clang libtool boost-dev miniupnpc-dev && \
-    apk add protobuf-dev libqrencode-dev libevent-dev chrpath zeromq-dev
+    apk add curl git autoconf automake make gcc g++ clang libtool && \
+    apk add protobuf-dev libqrencode-dev libevent-dev chrpath zeromq-dev sqlite-dev boost-dev miniupnpc-dev
 
 RUN mkdir -p build_info && printenv | tee build_info/build_envs.txt
 
@@ -25,17 +25,17 @@ RUN git clone --depth 1 -c advice.detachedHead=false \
 RUN cd ${BLOCKCHAIN_NAME} && echo "SOURCE_SHA=$(git rev-parse HEAD)" | tee -a ../build_info/build_envs.txt
 
 ### Configure sources
-RUN cd ${BLOCKCHAIN_NAME} && ./autogen.sh && ./configure \
+RUN cd ${BLOCKCHAIN_NAME} \
+    && ./autogen.sh \
+    && ./configure \
     --prefix=/usr \
     --enable-hardening \
     --enable-static \
     --disable-openssl-tests \
-    --disable-ccache \
-    --without-bdb \
     --disable-tests \
     --disable-bench \
+    --without-bdb \
     --disable-gui \
-    --disable-util-tx \
     --disable-man
 
 ### Make build
