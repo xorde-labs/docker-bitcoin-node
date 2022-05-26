@@ -21,8 +21,10 @@ fi
 
 ### Enable wallet:
 if printf "${WALLET_ENABLE}" | grep -q "[Yy1]"; then
-  echo "Enabling wallet"
-  printf "wallet=$HOME/.bitcoin/wallet\n" >> "${CONFIG_FILE}"
+  export WALLET_NAME=default_wallet
+  echo "Enabling wallet (${WALLET_NAME})"
+  bitcoin-wallet -wallet=${WALLET_NAME} create
+  printf "wallet=${WALLET_NAME}\n" >> "${CONFIG_FILE}"
 fi
 
 ### Enable txindex:
