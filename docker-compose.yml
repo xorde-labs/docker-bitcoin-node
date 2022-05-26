@@ -1,8 +1,10 @@
-version: '3'
+version: '3.4'
 
 services:
   bitcoin-node:
-    build: .
+    build:
+      context: .
+      network: host
     image: ghcr.io/xorde-nodes/bitcoin-node:latest
     restart: unless-stopped
     volumes:
