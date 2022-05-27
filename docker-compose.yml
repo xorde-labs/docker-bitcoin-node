@@ -7,10 +7,12 @@ services:
       network: host
     image: ghcr.io/xorde-nodes/bitcoin-node:latest
     restart: unless-stopped
+    command: ${CMD_OPTS}
     volumes:
       - bitcoin_data:/home/bitcoin/.bitcoin
     environment:
       - WALLET_ENABLE
+      - WALLET_LEGACY
       - TESTNET_ENABLE
       - MAX_CONNECTIONS
       - RPC_ENABLE

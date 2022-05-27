@@ -23,7 +23,11 @@ fi
 if printf "${WALLET_ENABLE}" | grep -q "[Yy1]"; then
   export WALLET_NAME=default_wallet
   echo "Enabling wallet..."
-  bitcoin-wallet -wallet=${WALLET_NAME} create && echo "Wallet [${WALLET_NAME}] created"
+  if printf "${WALLET_LEGACY}" | grep -q "[Yy1]"; then
+    echo "Will create legacy wallet"
+    WALLET_OPTS="${WALLET_OPTS} -legacy"
+  fi
+  bitcoin-wallet -wallet=${WALLET_NAME} ${WALLET_OPTS} create && echo "Wallet [${WALLET_NAME}] created"
   printf "wallet=${WALLET_NAME}\n" >> "${CONFIG_FILE}"
 fi
 
