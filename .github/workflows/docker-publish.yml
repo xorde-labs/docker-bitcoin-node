@@ -33,7 +33,7 @@ jobs:
           echo "SOURCE_VERSION=$(basename $(curl -Ls -o /dev/null -w %{url_effective} ${SOURCE_REPO}/releases/latest))" | tee -a $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
