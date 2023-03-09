@@ -8,13 +8,42 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '1 1 1 * *'
 
 jobs:
   build:
+    strategy:
+      matrix:
+        platforms:
+          - linux/arm64
+          - linux/amd64
+          - linux/arm/v7
+          - linux/arm/v6
+          - linux/ppc64le
+          - linux/s390x
+
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --build-arg DOCKER_GIT_SHA=${{ github.sha }}
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+      # Workaround: https://github.com/docker/build-push-action/issues/461
+    - name: Setup Docker buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        platforms: ${{ matrix.platforms }}
+
+    # Build and push Docker image with Buildx (don't push on PR)
+    # https://github.com/docker/build-push-action
+    - name: Build and push Docker image
+      id: build-and-push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        platforms: ${{ matrix.platforms }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          DOCKER_GIT_SHA=${{ github.sha }}
