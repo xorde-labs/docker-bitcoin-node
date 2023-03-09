@@ -2,18 +2,19 @@
 
 COIN_NAME=bitcoin
 NODE_NAME=${COIN_NAME}-node
+IMAGE_NAME=xorde/${NODE_NAME}
 
-export COIN_NAME
-export NODE_NAME
-
-docker build --no-cache -t xorde/${NODE_NAME} --build-arg arg-coin-name=${COIN_NAME} --build-arg arg-node-name=${NODE_NAME} .
+docker build -t ${IMAGE_NAME} .
 
 if [ $? -eq 0 ]
 then
-	echo ">>> The script ran ok"
-  	docker push xorde/${NODE_NAME}
+	echo ">>> Build successful"
+	IMAGE_VERSION=$(docker run ${IMAGE_NAME} ./version.sh)
+	docker image tag ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_VERSION}
+	docker image ls ${IMAGE_NAME}
+  	docker push -a ${IMAGE_NAME}
 	exit 0
 else
-  echo ">>> The script failed" >&2
+  echo ">>> Build failed" >&2
   exit 1
 fi
