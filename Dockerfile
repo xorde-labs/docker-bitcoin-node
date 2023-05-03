@@ -40,7 +40,7 @@ RUN cd ${BLOCKCHAIN_NAME} \
 
 ### Make build
 RUN cd ${BLOCKCHAIN_NAME} \
-    && make -j4
+    && make -j$(nproc --ignore=4)
 
 ### Install build
 RUN cd ${BLOCKCHAIN_NAME} \
